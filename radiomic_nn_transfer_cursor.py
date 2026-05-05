@@ -842,6 +842,10 @@ def logistic_regression_pipeline(X, y, n_splits=5):
         X_tr, X_va = X_trainval[tr], X_trainval[va]
         y_tr, y_va = y_trainval[tr], y_trainval[va]
 
+        X_tr = selector1.fit_transform(X_tr, y_tr)
+        X_va   = selector1.transform(X_va)
+        X_test  = selector1.transform(X_test)
+
         # ======================================================å
         # SIMPLE MODEL: Logistic Regression
         # ======================================================
@@ -921,6 +925,10 @@ for fold, (train_full_idx, test_idx) in enumerate(outer_kfold.split(X, y)):
         stratify=y_train_full,
         random_state=42
     )
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Train model on inner training set
     clf = LogisticRegression(max_iter=5000)
@@ -2117,6 +2125,10 @@ def kfold_ensemble_pipeline(X, y, site, n_splits=5):
         X_tr, X_va = X_trainval[tr], X_trainval[va]
         y_tr, y_va = y_trainval[tr], y_trainval[va]
         site_tr, site_va = site_trainval[tr], site_trainval[va]
+
+        X_tr    = selector1.fit_transform(X_tr, y_tr)
+        X_va    = selector1.transform(X_va)
+        X_test  = selector1.transform(X_test)
 
         # ---------- Stage 1 ----------
         site_net = train_site_predictor(X_tr, site_tr)
