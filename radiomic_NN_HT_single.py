@@ -428,9 +428,9 @@ def Feature_Select1(X, X_validate, X_validate0, y, top_num):
     
     return X_combined
 
-selector1   = SelectKBest(score_func=f_classif, k=100)  # e.g., top 100
+# selector1   = SelectKBest(score_func=f_classif, k=100)  # e.g., top 100
 # selector1.fit(X,y)
-X = selector1.fit_transform(X, y)
+# X = selector1.fit_transform(X, y)
 
 # Get the actual indices from the original 7000 features
 selected_indices = np.where(selector1.get_support())[0]
@@ -659,6 +659,9 @@ for fold, (trainval_idx, test_idx) in enumerate(kfold.split(X, y)):
         random_state=42
     )
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+
     # Convert to tensors
     X_train = torch.tensor(X_train, dtype=torch.float32)
     y_train = torch.tensor(y_train, dtype=torch.float32)
@@ -771,6 +774,9 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+
     # Train Random Forest
     rf = RandomForestClassifier(n_estimators=100, max_depth=None, random_state=42)
     rf.fit(X_train, y_train)
@@ -840,6 +846,10 @@ for fold, (trainval_idx, test_idx) in enumerate(kfold.split(X, y)):
         stratify=y_trainval,
         random_state=42
     )
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Train Random Forest
     rf = RandomForestClassifier(
@@ -930,6 +940,8 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
 
+    X_val   = selector1.transform(X_val)
+
     # TPOT classifier (generations and population size can be tuned)
     # tpot = TPOTClassifier(generations=5, population_size=5, random_state=42)
     tpot   = GradientBoostingClassifier(n_estimators=100, max_depth=None, random_state=42)
@@ -994,6 +1006,10 @@ for fold, (trainval_idx, test_idx) in enumerate(kfold.split(X, y)):
     X_test = X[test_idx]
     y_test = y[test_idx]
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
+    
     # Inner split (Train / Validation)
     X_train, X_val, y_train, y_val = train_test_split(
         X_trainval,
@@ -1078,6 +1094,10 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    #X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
+
     # Train logistic regression
     clf = LogisticRegression(penalty='l2', solver='liblinear', max_iter=5000)
     # clf = LogisticRegression(max_iter=5000)
@@ -1142,6 +1162,10 @@ for fold, (trainval_idx, test_idx) in enumerate(kfold.split(X, y)):
         stratify=y_trainval,
         random_state=42
     )
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Train Random Forest
     rf = LogisticRegression(penalty='l2', solver='liblinear', max_iter=5000)
