@@ -647,7 +647,7 @@ def Feature_Select1(X, X_validate, X_validate0, y, top_num):
     return X_combined
 
 # select_agent = 'LASSO'
-select_agent = 'ANOVA'
+# select_agent = 'ANOVA'
 
 if select_agent == 'ANOVA':
     selector1   = SelectKBest(score_func=f_classif, k=100)  # e.g., top 100
@@ -672,8 +672,8 @@ elif select_agent == 'LASSO':
     selector = SelectFromModel(lasso)
     X = selector.fit_transform(X, y)
 
-# X = Feature_Select1(X, X_validate, X_validate0, y, 100)
-select_name = [list(temp_df.columns)[i] for i in selected_indices]
+# X = Feature_Select(X, X_validate, X_validate0, y, 100)
+# select_name = [list(temp_df.columns)[i] for i in selected_indices]
 
 scaler = MinMaxScaler()
 # scaler = StandardScaler()
