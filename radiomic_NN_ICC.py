@@ -1022,6 +1022,10 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X_combined, y_combined)
     X_train, X_test = torch.tensor(X[train_idx], dtype=torch.float32), torch.tensor(X[test_idx], dtype=torch.float32)
     y_train, y_test = torch.tensor(y[train_idx], dtype=torch.float32), torch.tensor(y[test_idx], dtype=torch.float32)
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    #X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
+
     model = BinaryRadiomicsNet(input_dim=X_train.shape[1]).to(device)
     # criterion = nn.BCELoss()
     criterion = nn.BCEWithLogitsLoss()
@@ -1128,6 +1132,10 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
     X_train, X_test = torch.tensor(X[train_idx], dtype=torch.float32), torch.tensor(X[test_idx], dtype=torch.float32)
     y_train, y_test = torch.tensor(y[train_idx], dtype=torch.float32), torch.tensor(y[test_idx], dtype=torch.float32)
 
+    X_train = selector1.fit_transform(X_train, y_train)
+    #X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
+
     model = BinaryRadiomicsNet(input_dim=X_train.shape[1]).to(device)
     # criterion = nn.BCELoss()
     criterion = nn.BCEWithLogitsLoss()
@@ -1207,6 +1215,10 @@ for fold, (train_full_idx, test_idx) in enumerate(kfold.split(X, y)):
         stratify=y_train_full,
         random_state=42
     )
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Convert to tensors
     X_train = torch.tensor(X_train, dtype=torch.float32)
@@ -1312,6 +1324,10 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
 
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    #X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Train Random Forest
     rf = RandomForestClassifier(n_estimators=100, max_depth=None, random_state=42)
@@ -1427,6 +1443,10 @@ for fold, (train_idx, test_idx) in enumerate(kfold.split(X, y)):
 
     X_train, X_test = X[train_idx], X[test_idx]
     y_train, y_test = y[train_idx], y[test_idx]
+
+    X_train = selector1.fit_transform(X_train, y_train)
+    #X_val   = selector1.transform(X_val)
+    X_test  = selector1.transform(X_test)
 
     # Train logistic regression
     clf = LogisticRegression(penalty='l2', solver='liblinear', max_iter=5000)
